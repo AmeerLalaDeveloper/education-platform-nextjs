@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+ provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+
+enum CategoryName {
+  Development
+  Education
+  Sports
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  STUDENT
+  TEACHER
+}
+
+model Category {
+  category_id Int      @id @default(autoincrement())
+  name      CategoryName // Use the CategoryName enum type
+    courses   Course[]   // Define the opposite relation field
+
+}
+
+
+// Define the User table
+model User {
+  user_id    Int      @id @default(autoincrement())
+  username   String
+  email      String
+  password   String
+  role       UserRole @default(USER)
+  image_url  String?
+  enrollments Enrollment[]
+  // Define the courses relation
+  courses    Course[]
+}
+
+
+// Define the Course table
+model Course {
+  course_id     Int        @id @default(autoincrement())
+  instructor_id Int
+  category_id Int
+  title         String
+  description   String?
+  status        String
+  image_url        String
+  lessons       Lesson[]
+  enrollments   Enrollment[]
+  instructor    User       @relation(fields: [instructor_id], references: [user_id])
+    category      Category  @relation(fields: [category_id], references: [category_id])
+
+}
+
+
+// Define the Lesson table
+model Lesson {
+  lesson_id Int       @id @default(autoincrement())
+  course_id Int
+  title     String
+  content   String?
+  course    Course    @relation(fields: [course_id], references: [course_id])
+}
+
+// Define the Enrollment table
+model Enrollment {
+  enrollment_id Int      @id @default(autoincrement())
+  student_id    Int
+  course_id     Int
+  enrollment_date DateTime
+  student       User     @relation(fields: [student_id], references: [user_id])
+  course        Course   @relation(fields: [course_id], references: [course_id])
+}
