@@ -1,14 +1,15 @@
 "use server";
+import { signIn } from "@/auth";
 import { prisma } from "./prisma";
 import bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
 export const handleCredentialsLogin = async (formData) => {
   const { email, password } = Object.fromEntries(formData);
   try {
-    // await signIn("credentials", {
-    // email,
-    // password,
-    // });
+    await signIn("credentials", {
+      email,
+      password,
+    });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
