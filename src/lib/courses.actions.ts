@@ -29,3 +29,25 @@ export const getCoursesByCategory = async (id) => {
 
   return courses;
 };
+
+export const getCoursesByQuery = async (searchQuery) => {
+  const courses = await prisma.course.findMany({
+    where: {
+      OR: [
+        { title: { contains: searchQuery, mode: "insensitive" } },
+        { description: { contains: searchQuery, mode: "insensitive" } },
+      ],
+    },
+  });
+  return courses;
+};
+
+export const getCoursesByInstructorId = async (instructorId: number) => {
+  const courses = await prisma.course.findMany({
+    where: {
+      instructor_id: instructorId,
+    },
+  });
+
+  return courses;
+};

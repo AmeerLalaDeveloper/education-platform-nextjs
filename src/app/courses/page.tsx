@@ -4,9 +4,6 @@ import Link from "next/link";
 
 const CoursesPage = async () => {
   const categories = await getTop3CoursesPerCategory();
-  console.log("====================================");
-  console.log(categories);
-  console.log("====================================");
   return (
     <div className="container mx-auto mt-8">
       {categories.map((category) => (

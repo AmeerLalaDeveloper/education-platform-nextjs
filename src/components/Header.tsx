@@ -1,7 +1,11 @@
+"use client";
+import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-
 const Header = () => {
+  const session = useSession();
+  const { user } = session.data || {};
   return (
     <header className="bg-blue-500 p-4 text-white">
       <div className="container mx-auto">
@@ -17,9 +21,11 @@ const Header = () => {
             <li>
               <Link href="/login">Login</Link>
             </li>
-            <li>
-              <Link href="/register">Register</Link>
-            </li>
+            {user?.role === "INSTRUCTOR" && (
+              <li>
+                <Link href="/instructor">Instructor</Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

@@ -1,6 +1,7 @@
 import { Course } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
+import cPlaceholder from "../../public/course-placeholder.jpg";
 const CourseCard = ({ course }: { course: Course }) => {
   return (
     <div
@@ -8,7 +9,7 @@ const CourseCard = ({ course }: { course: Course }) => {
       className="bg-white shadow-md rounded-lg overflow-hidden"
     >
       <Image
-        src={course.image_url}
+        src={course.image_url || cPlaceholder}
         alt={course.title}
         className="w-full h-48 object-cover"
         height={50}
